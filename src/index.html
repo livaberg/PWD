@@ -1,18 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8" />
   <link rel="icon" href="./favicon.ico" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" type="text/css" href="./css/styles.css" />
-  <title>Examination Assignment - PWD</title>
+  <title>Personal Web Desktop</title>
   <script type="module" src="./js/index.js"></script>
 </head>
-
 <body>
-  <h1>Personal Web Desktop</h1>
-  <p>You have some work to do...</p>
-</body>
+  <div id="taskbar">
+    <button id="start-button" title="Start Menu">☰ Start</button>
+    <div id="clock"></div>
+  </div>
 
+  <main id="desktop">
+  </main>
+
+  <div id="dock">
+    <button class="app-icon" title="Open Memory">🧠</button>
+    <button class="app-icon" title="Open Messages">💬</button>
+    <button class="app-icon" title="Open Custom App">✨</button>
+  </div>
+
+  <script>
+    function updateClock() {
+    const clock = document.getElementById('clock');
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('sv-SE', { weekday: 'short', day: 'numeric', month: 'short' });
+    const timeStr = now.toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' });
+    clock.textContent = `${dateStr} ${timeStr}`;
+  }
+  setInterval(updateClock, 60000); // update every minute
+  updateClock();
+  </script>
+</body>
 </html>
