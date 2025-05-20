@@ -35,13 +35,13 @@ class PwdDesktop extends HTMLElement {
     </main>
 
     <div id="dock">
-      <button class="app-icon" title="Open Memory">
+      <button class="app-icon" data-label="Memory">
         <img src="icons/memory.png" alt="Memory Icon" />
       </button>
-      <button class="app-icon" title="Open Messages">
+      <button class="app-icon" data-label="Messages">
         <img src="icons/messaging.png" alt="Messaging Icon" />
       </button>
-      <button class="app-icon" title="Open Custom App">
+      <button class="app-icon" data-label="Custom App">
         <img src="icons/custom.png" alt="Custom Icon" />
       </button>
     </div>
@@ -83,6 +83,10 @@ class PwdDesktop extends HTMLElement {
     // Initializes the clock display immediately
     this.updateClock()
     setInterval(() => this.updateClock(), 60000)
+
+    // Append a sample app-window to shadow root
+    const appWindow = document.createElement('app-window')
+    this.shadowRoot.appendChild(appWindow)
   }
 
   /**

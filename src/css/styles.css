@@ -97,10 +97,34 @@ body::before {
   font-size: 4rem;
   cursor: pointer;
   transition: transform 0.3s ease;
+  position: relative;
 }
 
 .app-icon:hover {
   transform: scale(1.4);
+}
+
+.app-icon::after {
+  content: attr(data-label);
+  position: absolute;
+  bottom: 95%;
+  left: 125%;
+  transform: translateX(-50%) translateY(-10%);
+  background: #fff;
+  color: rgba(0, 0, 0, 0.8);
+  font-size: 13px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s;
+  z-index: 10;
+}
+
+.app-icon:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }
 
 .app-window {
@@ -123,8 +147,8 @@ body::before {
 
 .trash-bin {
   position: absolute;
-  bottom: 200px;
-  right: 150px;
+  bottom: 0px;
+  right: 140px;
   background: none;
   border: none;
   cursor: pointer;

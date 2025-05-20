@@ -1,9 +1,10 @@
 import './pwd-desktop.js'
+import '../app-window/app-window.js'
 
 /**
  * The main script file of the application.
  *
- * @author "Liv Åberg <lh224hh@student.lnu.se>"
+ * @author Liv Åberg <lh224hh@student.lnu.se>
  * @version 1.0.0
  */
 
