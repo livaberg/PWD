@@ -30,7 +30,7 @@ body::before {
   top: 0;
   left: 0;
   right: 0;
-  height: 40px;
+  height: 50px;
   background-color: #e5e1e1;
   backdrop-filter: blur(12px);
   display: flex;
@@ -75,11 +75,12 @@ body::before {
 
 #dock {
   position: absolute;
-  bottom: 20px;
+  bottom: 30px;
   left: 0;
 	right: 0;
 	margin: 0 auto;
-	max-width: 700px;
+	max-width: 1200px;
+  height: 190px;
   background: rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(12px);
   border-radius: 1.2rem;
@@ -99,7 +100,7 @@ body::before {
 }
 
 .app-icon:hover {
-  transform: scale(2.5);
+  transform: scale(1.4);
 }
 
 .app-window {
@@ -113,3 +114,53 @@ body::before {
   padding: 1rem;
   z-index: 10;
 }
+
+.app-icon img {
+  width: 9rem;
+  height: 9rem;
+  object-fit: contain;
+}
+
+.trash-bin {
+  position: absolute;
+  bottom: 200px;
+  right: 150px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.trash-bin img {
+  width: 9rem;
+  height: 9rem;
+  opacity: 0.9;
+  transition: transform 0.2s ease;
+}
+
+.trash-bin:hover img {
+  transform: scale(1.4);
+}
+
+#icon-attribution {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1rem;
+  color: #555;
+  text-align: center;
+  z-index: 999;
+  opacity: 0.8;
+  padding: 0 1rem;
+}
+
+#icon-attribution a {
+  color: #555;
+  text-decoration: none;
+  margin: 0 0.5rem;
+}
+
+#icon-attribution a:hover {
+  text-decoration: underline;
+}
+
