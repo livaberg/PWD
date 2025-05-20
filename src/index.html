@@ -6,82 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" type="text/css" href="./css/styles.css" />
     <title>Personal Web Desktop</title>
-    <script type="module" src="./js/index.js"></script>
+    <script type="module" src="./js/components/pwd-desktop/index.js"></script>
   </head>
   <body>
-    <div id="taskbar">
-      <button id="start-button" title="Start Menu">☰ Start</button>
-      <div id="clock"></div>
-    </div>
-
-    <main id="desktop">
-      <button class="trash-bin" title="Trash Bin">
-        <img src="icons/garbage.png" alt="Trash icon" />
-      </button>
-    </main>
-
-    <div id="dock">
-      <button class="app-icon" title="Open Memory">
-        <img src="icons/memory.png" alt="Memory Icon" />
-      </button>
-      <button class="app-icon" title="Open Messages">
-        <img src="icons/messaging.png" alt="Messaging Icon" />
-      </button>
-      <button class="app-icon" title="Open Custom App">
-        <img src="icons/custom.png" alt="Custom Icon" />
-      </button>
-    </div>
-
-    <div id="icon-attribution">
-      <small>
-        <a
-          href="https://www.flaticon.com/free-icons/memory"
-          title="memory icons"
-          target="_blank"
-          rel="noopener"
-          >Memory icon by Freepik - Flaticon
-        </a>
-        <a
-          href="https://www.flaticon.com/free-icons/messages"
-          title="messages icons"
-          target="_blank"
-          rel="noopener"
-          >Messages icon created by Freepik - Flaticon
-        </a>
-        <a
-          href="https://www.flaticon.com/free-icons/app"
-          title="app icons"
-          target="_blank"
-          rel="noopener"
-          >App icon created by Freepik - Flaticon
-        </a>
-        <a
-          href="https://www.flaticon.com/free-icons/recycle-bin"
-          title="recycle bin icons"
-          target="_blank"
-          rel="noopener"
-          >Recycle bin icons created by Freepik - flaticon
-        </a>
-      </small>
-    </div>
-
-    <script>
-      function updateClock() {
-        const clock = document.getElementById("clock")
-        const now = new Date()
-        const dateStr = now.toLocaleDateString("sv-SE", {
-          weekday: "short",
-          day: "numeric",
-          month: "short",
-        })
-        const timeStr = now.toLocaleTimeString("sv-SE", {
-          hour: "2-digit",
-          minute: "2-digit",
-        })
-        clock.textContent = `${dateStr} ${timeStr}`
-      }
-      setInterval(updateClock, 60000) // update every minute
-      updateClock()
-    </script>
+    <pwd-desktop></pwd-desktop>
   </body>
 </html>

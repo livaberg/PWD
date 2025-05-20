@@ -1,3 +1,5 @@
+import './pwd-desktop.js'
+
 /**
  * The main script file of the application.
  *
