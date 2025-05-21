@@ -1,7 +1,8 @@
 /**
- * @file The HTML template for the my-memory-game web component.
- * @module my-memory-game.html
+ * @file The HTML template for the memory-app web component.
+ * @module memory-app.html
  * @author Mats Loock <mats.loock@lnu.se>
+ * @author Liv Åberg <lh224hh@student.lnu.se>
  */
 
 import '../my-flipping-tile-extra'
