@@ -5,6 +5,7 @@
  * @author Liv Åberg <lh224hh@student.lnu.se>
  */
 
+import '../flipping-tile/index.js'
 import { cssTemplate, IMG_URLS } from './memory-app.css'
 import { htmlTemplate } from './memory-app.html'
 
@@ -48,9 +49,8 @@ customElements.define('memory-app',
       this.attachShadow({ mode: 'open' })
       this.shadowRoot.appendChild(cssTemplate.content.cloneNode(true))
       this.shadowRoot.appendChild(htmlTemplate.content.cloneNode(true))
-
-      console.log('game board', this.#gameBoard)
-      console.log('tile template', this.#tileTemplate)
+      console.log('css template', cssTemplate)
+      console.log('html template', htmlTemplate)
 
       // Make it possible to remove the event listeners.
       this.#abortController = new AbortController()
@@ -60,6 +60,9 @@ customElements.define('memory-app',
 
       // Get the tile template element in the shadow root.
       this.#tileTemplate = this.shadowRoot.querySelector('#tile-template')
+
+      console.log('game board', this.#gameBoard)
+      console.log('tile template', this.#tileTemplate)
     }
 
     /**

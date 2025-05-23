@@ -28,8 +28,8 @@ class AppWindow extends HTMLElement {
           position: absolute;
           top: 100px;
           left: 100px;
-          width: 550px;
-          height: 550px;
+          width: 535px;
+          height: 565px;
           border: 2px solid #666;
           background: white;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);

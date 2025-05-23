@@ -12,7 +12,7 @@
 import { cssTemplate } from './flipping-tile.css.js'
 import { htmlTemplate } from './flipping-tile.html.js'
 
-customElements.define('lipping-tile',
+customElements.define('flipping-tile',
   /**
    * Represents a flipping tile.
    */

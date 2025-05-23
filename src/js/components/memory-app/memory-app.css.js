@@ -26,7 +26,7 @@ export const cssTemplate = document.createElement('template')
 cssTemplate.innerHTML = `
   <style>
     :host {
-      --tile-size: 80px;
+      --tile-size: 108px;
     }
     #game-board {
       display: grid;
