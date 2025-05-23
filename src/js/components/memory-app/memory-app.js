@@ -11,7 +11,7 @@ import { htmlTemplate } from './memory-app.html'
 /*
  * Define custom element.
  */
-customElements.define('my-memory-game',
+customElements.define('memory-app',
   /**
    * Represents a memory game
    */
@@ -48,6 +48,9 @@ customElements.define('my-memory-game',
       this.attachShadow({ mode: 'open' })
       this.shadowRoot.appendChild(cssTemplate.content.cloneNode(true))
       this.shadowRoot.appendChild(htmlTemplate.content.cloneNode(true))
+
+      console.log('game board', this.#gameBoard)
+      console.log('tile template', this.#tileTemplate)
 
       // Make it possible to remove the event listeners.
       this.#abortController = new AbortController()
@@ -150,7 +153,7 @@ customElements.define('my-memory-game',
 
       this.#upgradeProperty('boardsize')
 
-      this.#gameBoard.addEventListener('my-flipping-tile-extra:flip',
+      this.#gameBoard.addEventListener('flipping-tile:flip',
         () => this.#onTileFlip(),
         { signal: this.#abortController.signal }
       )
@@ -254,11 +257,11 @@ customElements.define('my-memory-game',
         const delay = isEqual ? 1000 : 1500
 
         window.setTimeout(() => {
-          let eventName = 'my-memory-game:tiles-mismatch'
+          let eventName = 'memory-app:tiles-mismatch'
           if (isEqual) {
             first.setAttribute('hidden', '')
             second.setAttribute('hidden', '')
-            eventName = 'my-memory-game:tiles-match'
+            eventName = 'memory-app:tiles-match'
           } else {
             first.removeAttribute('face-up')
             second.removeAttribute('face-up')
@@ -272,7 +275,7 @@ customElements.define('my-memory-game',
 
           if (tiles.all.every(tile => tile.hidden)) {
             tiles.all.forEach(tile => (tile.disabled = true))
-            this.dispatchEvent(new CustomEvent('my-memory-game:game-over', {
+            this.dispatchEvent(new CustomEvent('memory-app:game-over', {
               bubbles: true
             }))
 

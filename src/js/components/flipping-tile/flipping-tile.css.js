@@ -1,8 +1,9 @@
 /**
  * @file A CSS template string that is used to style the shadow DOM of the
- * my-flipping-tile-extra web component.
- * @module my-flipping-tile-extra.css
+ * flipping-tile web component.
+ * @module flipping-tile.css
  * @author Mats Loock <mats.loock@lnu.se>
+ * @author Liv Åberg <lh224hh@student.lnu.se>
  */
 
 // Define the CSS template.

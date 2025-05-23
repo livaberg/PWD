@@ -14,15 +14,14 @@ Default value: large
 
 | Event Name      | Fired When                        |
 | --------------- | --------------------------------- |
-| `memory-game:tiles-match`    | The tiles facing up match.        |
-| `memory-game:tiles-mismatch` | The tiles facing up do not match. |
-| `memory-game:game-over`      | The game is over.                 |
+| `memory-app:tiles-match`    | The tiles facing up match.        |
+| `memory-app:tiles-mismatch` | The tiles facing up do not match. |
+| `memory-app:game-over`      | The game is over.                 |
 
 ## Example
 
 ```html
-<my-memory-game></my-memory-game>
-</my-memory-gam>
+<memory-app></memory-app>
 ```
 
 ![Example](./.readme/example.gif)

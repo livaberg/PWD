@@ -1,17 +1,18 @@
 /**
- * @file The my-flipping-tile web component module.
- * @module my-flipping-tile
+ * @file The flipping-tile web component module.
+ * @module flipping-tile
  * @description This module defines a web component representing a flipping tile.
  * It handles visual states and interaction logic for flipping the tile,
  * including managing 'face-up', 'disabled', and 'hidden' attribute states.
- * The module dispatches 'my-flipping-tile:flip' events to notify when a tile is flipped.
+ * The module dispatches 'flipping-tile:flip' events to notify when a tile is flipped.
  * @author Mats Loock <mats.loock@lnu.se>
+ * @author Liv Åberg <lh224hh@student.lnu.se>
  */
 
-import { cssTemplate } from './my-flipping-tile-extra.css.js'
-import { htmlTemplate } from './my-flipping-tile-extra.html.js'
+import { cssTemplate } from './flipping-tile.css.js'
+import { htmlTemplate } from './flipping-tile.html.js'
 
-customElements.define('my-flipping-tile-extra',
+customElements.define('lipping-tile',
   /**
    * Represents a flipping tile.
    */
@@ -135,8 +136,8 @@ customElements.define('my-flipping-tile-extra',
         ? this.removeAttribute('face-up')
         : this.setAttribute('face-up', '')
 
-      // Raise the my-flipping-tile-extra:flip event.
-      this.dispatchEvent(new CustomEvent('my-flipping-tile-extra:flip', {
+      // Raise the flipping-tile:flip event.
+      this.dispatchEvent(new CustomEvent('flipping-tile:flip', {
         bubbles: true,
         detail: { faceUp: this.hasAttribute('face-up') }
       }))

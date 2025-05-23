@@ -1,4 +1,4 @@
-# &lt;my-flipping-tile-extra&gt;
+# &lt;flipping-tile&gt;
 
 A web component that represents a flipping tile.
 
@@ -39,9 +39,9 @@ The back element (div) is styleable using the part `tile-back`.
 ## Example
 
 ```html
-<my-flipping-tile-extra face-up>
+<flipping-tile face-up>
     <img src="./images/2.png" alt="phonograph" />
-</my-flipping-tile-extra>
+</flipping-tile>
 ```
 
 ![Example](./.readme/example.gif)

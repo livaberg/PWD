@@ -1,7 +1,8 @@
 /**
- * @file The HTML template for the my-flipping-tile-extra web component.
- * @module my-flipping-tile-extra.html
+ * @file The HTML template for the flipping-tile web component.
+ * @module flipping-tile.html
  * @author Mats Loock <mats.loock@lnu.se>
+ * @author Liv Åberg <lh224hh@student.lnu.se>
  */
 
 // Define the HTML template.

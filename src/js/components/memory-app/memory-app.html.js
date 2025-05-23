@@ -5,7 +5,7 @@
  * @author Liv Åberg <lh224hh@student.lnu.se>
  */
 
-import '../my-flipping-tile-extra'
+import '../flipping-tile'
 
 /*
  * Define the HTML template.
@@ -13,9 +13,9 @@ import '../my-flipping-tile-extra'
 export const htmlTemplate = document.createElement('template')
 htmlTemplate.innerHTML = `
   <template id="tile-template">
-    <my-flipping-tile-extra>
+    <flipping-tile>
       <img />
-    </my-flipping-tile-extra>
+  </flipping-tile>
   </template>
   <div id="game-board">
   </div>

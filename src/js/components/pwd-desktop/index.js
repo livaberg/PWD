@@ -1,5 +1,6 @@
 import './pwd-desktop.js'
-import '../app-window/app-window.js'
+import '../app-window/index.js'
+import '../memory-app/index.js'
 
 /**
  * The main script file of the application.

@@ -6,18 +6,19 @@
  */
 class AppWindow extends HTMLElement {
   /**
-   * Constructor sets up the Shadow DOM in open mode.
+   * Initialize shadow DOM and bind drag handlers.
    */
   constructor () {
     super()
-    this.attachShadow({ mode: 'open' }) // Enables external access for testing/debugging
+    this.attachShadow({ mode: 'open' })
+
+    this._dragging = false
+    this._onDrag = this._onDrag.bind(this)
+    this._onDragEnd = this._onDragEnd.bind(this)
   }
 
   /**
-   * Lifecycle method called when the element is added to the DOM.
-   *
-   * Sets up the UI structure and styling for the window and injects scoped styles via Shadow DOM.
-   * Also attaches a click handler for the close button.
+   * Render UI and attach event listeners.
    */
   connectedCallback () {
     this.shadowRoot.innerHTML = `
@@ -34,10 +35,10 @@ class AppWindow extends HTMLElement {
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
           user-select: none;
           border-radius: 16px;
+          z-index: 1;
         }
         .header {
           background: #e5e1e1;
-          box-shadow: 0 4px 2px rgba(0, 0, 0, 0.4);
           color: black;
           font-size: 18px;
           font-weight: bold;
@@ -48,7 +49,12 @@ class AppWindow extends HTMLElement {
           border-bottom: 2px solid #888;
           border-top-left-radius: 16px;
           border-top-right-radius: 16px;
+          cursor: grab;
           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+          user-select: none;
+        }
+        .header:active {
+          cursor: grabbing;
         }
         .content {
           padding: 10px;
@@ -56,7 +62,7 @@ class AppWindow extends HTMLElement {
           overflow: auto;
         }
         button.close-btn {
-          background:rgb(244, 87, 69);
+          background: rgb(244, 87, 69);
           border: 1px solid rgb(17, 16, 16);
           color: rgb(61, 60, 60);
           font-size: 18px;
@@ -75,25 +81,81 @@ class AppWindow extends HTMLElement {
         button.close-btn:hover {
           transform: scale(1.2);
         }
-
       </style>
       <div class="header">
-        <span class="title">Memory Game</span>
+        <span class="title"></span>
         <button class="close-btn" title="Close">&times;</button>
       </div>
       <div class="content">
         <slot></slot>
       </div>
     `
-    // const title = this.getAttribute('title')
-    // this.shadowRoot.querySelector('.title').textContent = title
 
-    // Close button just removes the element
-    this.shadowRoot
-      .querySelector('.close-btn')
-      .addEventListener('click', () => this.remove())
+    const title = this.getAttribute('title')
+    this.shadowRoot.querySelector('.title').textContent = title
+
+    this.shadowRoot.querySelector('.close-btn').addEventListener('click', () => this.remove())
+
+    const header = this.shadowRoot.querySelector('.header')
+    header.addEventListener('mousedown', this._onDragStart.bind(this))
+
+    // Click on the header brings the window to the front
+    this.addEventListener('mousedown', () => this._bringToFront())
+  }
+
+  /**
+   * Start dragging on mouse down.
+   *
+   * @param {MouseEvent} event - The mouse event.
+   */
+  _onDragStart (event) {
+    event.preventDefault()
+    this._dragging = true
+    this._startX = event.clientX
+    this._startY = event.clientY
+    const rect = this.getBoundingClientRect()
+    this._offsetX = this._startX - rect.left
+    this._offsetY = this._startY - rect.top
+
+    window.addEventListener('mousemove', this._onDrag)
+    window.addEventListener('mouseup', this._onDragEnd)
+  }
+
+  /**
+   * Move the window as the mouse moves.
+   *
+   * @param {MouseEvent} event - The mouse event.
+   */
+  _onDrag (event) {
+    if (!this._dragging) return
+    const left = event.clientX - this._offsetX
+    const top = event.clientY - this._offsetY
+    this.style.left = `${left}px`
+    this.style.top = `${top}px`
+  }
+
+  /**
+   * Stop dragging on mouse up.
+   */
+  _onDragEnd () {
+    this._dragging = false
+    window.removeEventListener('mousemove', this._onDrag)
+    window.removeEventListener('mouseup', this._onDragEnd)
+  }
+
+  /**
+   * Bring the window to the front by setting a higher z-index.
+   */
+  _bringToFront () {
+    const siblings = Array.from(this.parentElement.children)
+    const maxZ = siblings.reduce((max, el) => {
+      const z = parseInt(window.getComputedStyle(el).zIndex) || 0
+      return z > max ? z : max
+    }, 0)
+
+    this.style.zIndex = maxZ + 1
   }
 }
 
-// Define the custom element <app-window>
+// Register the custom element with the browser
 customElements.define('app-window', AppWindow)

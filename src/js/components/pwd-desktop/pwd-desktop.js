@@ -18,75 +18,117 @@ class PwdDesktop extends HTMLElement {
    * Renders the UI and starts the clock update interval.
    */
   connectedCallback () {
+    this.windowOffset = 0 // Offset used for cascading window placement to avoid exact overlap
+    this.zIndexCounter = 10 // Initial z-index to manage which window is on top
+
     this.shadowRoot.innerHTML = `
-    <style>
+      <style>
         @import "/css/styles.css";
       </style>
       
       <div id="taskbar">
-      <button id="start-button" title="Start Menu">☰ Start</button>
-      <div id="clock"></div>
-    </div>
+        <button id="start-button" title="Start Menu">☰ Start</button>
+        <div id="clock"></div>
+      </div>
 
-    <main id="desktop">
-      <button class="trash-bin" title="Trash Bin">
-        <img src="icons/garbage.png" alt="Trash icon" />
-      </button>
-    </main>
+      <div id="dock">
+        <button class="app-icon" data-label="Memory">
+          <img src="icons/memory.png" alt="Memory Icon" />
+        </button>
+        <button class="app-icon" data-label="Messages">
+          <img src="icons/messaging.png" alt="Messaging Icon" />
+        </button>
+        <button class="app-icon" data-label="Custom App">
+          <img src="icons/custom.png" alt="Custom Icon" />
+        </button>
+      </div>
 
-    <div id="dock">
-      <button class="app-icon" data-label="Memory">
-        <img src="icons/memory.png" alt="Memory Icon" />
-      </button>
-      <button class="app-icon" data-label="Messages">
-        <img src="icons/messaging.png" alt="Messaging Icon" />
-      </button>
-      <button class="app-icon" data-label="Custom App">
-        <img src="icons/custom.png" alt="Custom Icon" />
-      </button>
-    </div>
+      <main id="desktop">
+        <button class="trash-bin" title="Trash Bin">
+          <img src="icons/garbage.png" alt="Trash icon" />
+        </button>
+      </main>
 
-    <div id="icon-attribution">
-      <small>
-        <a
-          href="https://www.flaticon.com/free-icons/memory"
-          title="memory icons"
-          target="_blank"
-          rel="noopener"
-          >Memory icon by Freepik - Flaticon
-        </a>
-        <a
-          href="https://www.flaticon.com/free-icons/messages"
-          title="messages icons"
-          target="_blank"
-          rel="noopener"
-          >Messages icon created by Freepik - Flaticon
-        </a>
-        <a
-          href="https://www.flaticon.com/free-icons/app"
-          title="app icons"
-          target="_blank"
-          rel="noopener"
-          >App icon created by Freepik - Flaticon
-        </a>
-        <a
-          href="https://www.flaticon.com/free-icons/recycle-bin"
-          title="recycle bin icons"
-          target="_blank"
-          rel="noopener"
-          >Recycle bin icons created by Freepik - flaticon
-        </a>
-      </small>
-    </div>
+      <div id="icon-attribution">
+              <small>
+          <a
+            href="https://www.flaticon.com/free-icons/memory"
+            title="memory icons"
+            target="_blank"
+            rel="noopener"
+            >Memory icon by Freepik - Flaticon
+          </a>
+          <a
+            href="https://www.flaticon.com/free-icons/messages"
+            title="messages icons"
+            target="_blank"
+            rel="noopener"
+            >Messages icon created by Freepik - Flaticon
+          </a>
+          <a
+            href="https://www.flaticon.com/free-icons/app"
+            title="app icons"
+            target="_blank"
+            rel="noopener"
+            >App icon created by Freepik - Flaticon
+          </a>
+          <a
+            href="https://www.flaticon.com/free-icons/recycle-bin"
+            title="recycle bin icons"
+            target="_blank"
+            rel="noopener"
+            >Recycle bin icons created by Freepik - flaticon
+          </a>
+        </small>
+      </div>
     `
 
-    // Initializes the clock display immediately
+    // Start the clock and update it every minute
     this.updateClock()
     setInterval(() => this.updateClock(), 60000)
 
-    // Append a sample app-window to shadow root
-    const appWindow = document.createElement('app-window')
-    this.shadowRoot.appendChild(appWindow)
+    const desktop = this.shadowRoot.querySelector('#desktop')
+
+    const appButtons = this.shadowRoot.querySelectorAll('.app-icon')
+    appButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const label = btn.getAttribute('data-label') || 'App'
+        const appWindow = document.createElement('app-window')
+        appWindow.setAttribute('title', label)
+        appWindow.style.zIndex = this.zIndexCounter++
+
+        // Cascade the window position
+        const offset = this.windowOffset
+        appWindow.style.top = `${100 + offset}px`
+        appWindow.style.left = `${100 + offset}px`
+        this.windowOffset += 30
+        if (this.windowOffset > 300) this.windowOffset = 0
+
+        let appContent
+        switch (label) {
+          case 'Memory':
+            appContent = document.createElement('memory-app')
+            break
+          case 'Messages':
+            appContent = document.createElement('messages-app')
+            break
+          case 'Custom App':
+            appContent = document.createElement('custom-app')
+            break
+          default:
+            appContent = document.createElement('div')
+        }
+
+        appWindow.appendChild(appContent)
+
+        // Increase z-index on click
+        appWindow.addEventListener('mousedown', () => {
+          appWindow.style.zIndex = this.zIndexCounter++
+        })
+
+        desktop.appendChild(appWindow)
+      })
+    })
   }
 
   /**
