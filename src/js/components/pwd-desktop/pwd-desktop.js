@@ -110,7 +110,7 @@ class PwdDesktop extends HTMLElement {
             appContent = document.createElement('memory-app')
             break
           case 'Messages':
-            appContent = document.createElement('messages-app')
+            appContent = document.createElement('message-app')
             break
           case 'Custom App':
             appContent = document.createElement('custom-app')

@@ -38,6 +38,8 @@ customElements.define('memory-app',
      */
     #tileTemplate
 
+    #sizeSelector
+
     /**
      * Creates an instance of the current type.
      */
@@ -49,8 +51,6 @@ customElements.define('memory-app',
       this.attachShadow({ mode: 'open' })
       this.shadowRoot.appendChild(cssTemplate.content.cloneNode(true))
       this.shadowRoot.appendChild(htmlTemplate.content.cloneNode(true))
-      console.log('css template', cssTemplate)
-      console.log('html template', htmlTemplate)
 
       // Make it possible to remove the event listeners.
       this.#abortController = new AbortController()
@@ -60,9 +60,6 @@ customElements.define('memory-app',
 
       // Get the tile template element in the shadow root.
       this.#tileTemplate = this.shadowRoot.querySelector('#tile-template')
-
-      console.log('game board', this.#gameBoard)
-      console.log('tile template', this.#tileTemplate)
     }
 
     /**
@@ -169,6 +166,19 @@ customElements.define('memory-app',
         },
         { signal: this.#abortController.signal }
       )
+
+      this.#sizeSelector = this.shadowRoot.querySelector('#size-selector')
+
+      this.#sizeSelector.addEventListener('click', (event) => {
+        if (event.target.tagName === 'BUTTON') {
+          const size = event.target.getAttribute('data-size')
+          this.boardSize = size
+
+          this.#sizeSelector.hidden = true
+
+          this.#gameBoard.hidden = false
+        }
+      }, { signal: this.#abortController.signal })
     }
 
     /**
@@ -176,7 +186,6 @@ customElements.define('memory-app',
      */
     disconnectedCallback () {
       // Remove the event listener.
-      // (The same signal can be used to remove other event listeners!)
       this.#abortController.abort()
     }
 

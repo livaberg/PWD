@@ -36,6 +36,7 @@ class AppWindow extends HTMLElement {
           user-select: none;
           border-radius: 16px;
           z-index: 1;
+          background-color: #f9f7f3;
         }
         .header {
           background: #e5e1e1;
