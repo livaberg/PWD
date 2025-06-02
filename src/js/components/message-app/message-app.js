@@ -48,6 +48,28 @@ class MessageApp extends HTMLElement {
           position: relative;
         }
 
+        .message-wrapper.self {
+          align-self: flex-end;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+        }
+
+        .message-wrapper.other {
+          align-self: flex-start;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .username {
+          font-weight: bold;
+          font-size: 0.75rem;
+          color: #666;
+          margin-bottom: 0.2rem;
+          user-select: none;
+        }
+
         .messages {
           flex: 1;
           overflow-y: auto;
@@ -60,8 +82,9 @@ class MessageApp extends HTMLElement {
 
         .message {
           max-width: 70%;
+          min-width: 30px;
           padding: 0.75rem 1.25rem;
-          border-radius: 1.5rem;
+          border-radius: 1.2rem;
           line-height: 1.6;
           word-wrap: break-word;
           font-size: 1rem;
@@ -164,12 +187,26 @@ class MessageApp extends HTMLElement {
       if (msg.type === 'message') {
         const messagesContainer = this.shadowRoot.querySelector('.messages')
 
+        const wrapper = document.createElement('div')
+        wrapper.classList.add('message-wrapper')
+        wrapper.classList.add(msg.username === this.username ? 'self' : 'other')
+
+        // Username
+        const usernameElement = document.createElement('div')
+        usernameElement.classList.add('username')
+        usernameElement.textContent = msg.username === this.username ? 'You' : msg.username
+
+        // Message content
         const messageElement = document.createElement('div')
         messageElement.classList.add('message')
+
         messageElement.classList.add(msg.username === this.username ? 'self' : 'other')
+
         messageElement.textContent = msg.data
 
-        messagesContainer.appendChild(messageElement)
+        wrapper.appendChild(usernameElement)
+        wrapper.appendChild(messageElement)
+        messagesContainer.appendChild(wrapper)
 
         // Limit the number of messages displayed to the last 20
         while (messagesContainer.children.length > 20) {
