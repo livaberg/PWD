@@ -17,29 +17,43 @@ class MessageApp extends HTMLElement {
    * Renders the UI and starts the clock update interval.
    */
   connectedCallback () {
+    let username = localStorage.getItem('messageAppUsername')
+
+    if (!username) {
+      username = prompt('Please enter your username:')
+      if (username) {
+        localStorage.setItem('messageAppUsername', username)
+      } else {
+        username = 'Anonymous'
+      }
+    }
+
+    this.username = username
+
     this.shadowRoot.innerHTML = `
       <style>
         :host {
           display: block;
-          height: 100%;
+          height: 100vh;
           font-family: sans-serif;
+          box-sizing: border-box;
         }
 
         .chat-wrapper {
           display: flex;
           flex-direction: column;
           height: 100%;
-          padding: 1rem;
-          box-sizing: border-box;
+          position: relative;
         }
 
         .messages {
           flex: 1;
-          overflow-y: auto;
+          overflow-y: clip;
           display: flex;
           flex-direction: column;
           gap: 0.5rem;
-          padding-right: 0.5rem;
+          padding: 0 0.5rem 1rem 0.5rem;
+          box-sizing: border-box;
         }
 
         .message {
@@ -63,10 +77,25 @@ class MessageApp extends HTMLElement {
           border: 1px solid #ddd;
         }
 
+        .footer {
+          position: sticky;
+          bottom: 0;
+          padding: 0.5rem 1rem 1rem;
+          z-index: 1;
+        }
+
+        .current-user {
+          font-weight: bold;
+          color: #333;
+          font-size: 1rem;
+          margin-bottom: 0.5rem;
+        }
+        
         .input-area {
           display: flex;
           gap: 0.5rem;
-          margin-top: 1rem;
+          margin-top: 0.1rem;
+          margin-bottom: 1rem;
         }
 
         textarea {
@@ -95,15 +124,19 @@ class MessageApp extends HTMLElement {
       </style>
 
       <div class="chat-wrapper">
-        <div class="messages">
-          <div class="message other">Hej!</div>
+      <div class="messages">
+        <div class="message other">Hej!</div>
           <div class="message self">Testar det här är ett jättejätte jättelångt meddelande</div>
         </div>
-        <div class="input-area">
-          <textarea rows="2" placeholder="Write a message..."></textarea>
-          <button>Send</button>
-        </div>
+     
+      <div class="footer">
+      <div class="current-user">You are chatting as: ${this.username}</div>
+      <div class="input-area">
+        <textarea rows="2" placeholder="Type your message..."></textarea>
+        <button>Send</button>
       </div>
+      </div>
+    </div>
     `
   }
 }
