@@ -203,7 +203,12 @@ class MessageApp extends HTMLElement {
     })
   }
 
-  sendMessage(messageText) {
+  /**
+   * Sends a message through the WebSocket connection.
+   *
+   * @param {string} messageText - The text of the message to send.
+   */
+  sendMessage (messageText) {
     if (this.socket && this.socket.readyState === WebSocket.OPEN) {
       const messageObject = {
         type: 'message',
