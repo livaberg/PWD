@@ -1,3 +1,5 @@
+import { API_KEY, CHANNEL } from '../../../../secrets.js'
+
 /**
  * @file The message-app web component module.
  * @module message-app
@@ -48,7 +50,7 @@ class MessageApp extends HTMLElement {
 
         .messages {
           flex: 1;
-          overflow-y: clip;
+          overflow-y: auto;
           display: flex;
           flex-direction: column;
           gap: 0.5rem;
@@ -130,7 +132,7 @@ class MessageApp extends HTMLElement {
         </div>
      
       <div class="footer">
-      <div class="current-user">You are chatting as: ${this.username}</div>
+      <div class="current-user">Chatting as: ${this.username}</div>
       <div class="input-area">
         <textarea rows="2" placeholder="Type your message..."></textarea>
         <button>Send</button>
@@ -138,6 +140,83 @@ class MessageApp extends HTMLElement {
       </div>
     </div>
     `
+
+    this.socket = new WebSocket('wss://courselab.lnu.se/message-app/socket')
+
+    this.socket.addEventListener('open', () => {
+      console.log('✅ WebSocket connected')
+    })
+    this.socket.addEventListener('error', (err) => {
+      console.error('❌ WebSocket error:', err)
+    })
+
+    this.socket.addEventListener('close', () => {
+      console.warn('⚠️ WebSocket disconnected')
+    })
+
+    this.socket.addEventListener('message', (event) => {
+      const msg = JSON.parse(event.data)
+
+      if (msg.type === 'heartbeat') {
+        return
+      }
+
+      if (msg.type === 'message') {
+        const messagesContainer = this.shadowRoot.querySelector('.messages')
+
+        const messageElement = document.createElement('div')
+        messageElement.classList.add('message')
+        messageElement.classList.add(msg.username === this.username ? 'self' : 'other')
+        messageElement.textContent = msg.data
+
+        messagesContainer.appendChild(messageElement)
+
+        // Limit the number of messages displayed to the last 20
+        while (messagesContainer.children.length > 20) {
+          messagesContainer.removeChild(messagesContainer.firstChild)
+        }
+
+        messagesContainer.scrollTop = messagesContainer.scrollHeight
+      }
+    })
+
+    this.shadowRoot.querySelector('button').addEventListener('click', () => {
+      const textarea = this.shadowRoot.querySelector('textarea')
+      const messageText = textarea.value.trim()
+      if (messageText) {
+        this.sendMessage(messageText)
+        textarea.value = ''
+        // console.log(`Sent message: ${messageText}`)
+      }
+    })
+    this.shadowRoot.querySelector('textarea').addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault()
+        const textarea = this.shadowRoot.querySelector('textarea')
+        const messageText = textarea.value.trim()
+        if (messageText) {
+          this.sendMessage(messageText)
+          textarea.value = ''
+          // console.log(`Sent message: ${messageText}`)
+        }
+      }
+    })
+  }
+
+  sendMessage(messageText) {
+    if (this.socket && this.socket.readyState === WebSocket.OPEN) {
+      const messageObject = {
+        type: 'message',
+        data: messageText,
+        username: this.username,
+        channel: CHANNEL,
+        key: API_KEY
+      }
+
+      this.socket.send(JSON.stringify(messageObject))
+    } else {
+      console.warn('WebSocket is not open. Unable to send message.')
+    }
   }
 }
 

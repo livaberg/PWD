@@ -187,4 +187,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# Secret config for local development
+secrets.js
+
 # End of https://www.gitignore.io/api/node,linux,macos,windows,visualstudiocode
