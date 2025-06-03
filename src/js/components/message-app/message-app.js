@@ -214,7 +214,6 @@ class MessageApp extends HTMLElement {
       <div class="current-user">Chatting as: ${this.username}</div>
       <div class="input-area">
         <textarea rows="2" placeholder="Type your message..."></textarea>
-        <!-- https://www.npmjs.com/package/emoji-picker-element -->
         <button class="emoji-button" aria-label="Open emoji picker">
             <span class="emoji">❤️</span>
             <span class="emoji">😂</span>
