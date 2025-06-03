@@ -146,6 +146,62 @@ class MessageApp extends HTMLElement {
         button:hover {
           background-color: #1c7ed6;
         }
+
+       .emoji-button {
+          background: none;
+          border: none;
+          padding: 0;
+          margin: 0;
+          cursor: pointer;
+          position: relative;
+          display: flex;
+          align-items: center;
+          gap: 0.1rem;
+          height: 2rem;
+          width: auto;
+          color: inherit;
+        }
+
+        .emoji-button:hover {
+          background: none !important;
+          border: none !important;
+          box-shadow: none !important;
+          outline: none !important;
+          color: inherit;
+        }
+
+        .emoji-button .emoji {
+          font-size: 1.4rem;
+          pointer-events: none;
+          position: relative;
+          margin-left: -1.2rem;
+        }
+
+        .emoji-button .emoji.plus {
+          position: absolute;
+          right: -0.2rem;
+          bottom: -0.1rem;
+          font-size: 0.9rem;
+          font-weight: bold;
+          border-radius: 50%;
+          padding: 0 0.1rem;
+          box-shadow: 0 0 1px rgba(0,0,0,0.3);
+          background-color: transparent;
+        }
+
+        .emoji-container {
+          position: absolute;
+          bottom: 70px;
+          right: 1rem;
+          z-index: 10;
+          background: white;
+          border-radius: 0.5rem;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .emoji-button .emoji:first-child {
+          margin-left: 0;
+        }
       </style>
 
       <div class="chat-wrapper">
@@ -158,11 +214,54 @@ class MessageApp extends HTMLElement {
       <div class="current-user">Chatting as: ${this.username}</div>
       <div class="input-area">
         <textarea rows="2" placeholder="Type your message..."></textarea>
-        <button>Send</button>
+        <!-- https://www.npmjs.com/package/emoji-picker-element -->
+        <button class="emoji-button" aria-label="Open emoji picker">
+            <span class="emoji">❤️</span>
+            <span class="emoji">😂</span>
+            <span class="emoji plus">➕</span>
+          </button>
+          <div class="emoji-container" hidden>
+            <emoji-picker></emoji-picker>
+          </div>
+        <button class="send-button">Send</button>
       </div>
       </div>
     </div>
     `
+
+    const emojiButton = this.shadowRoot.querySelector('.emoji-button')
+    const emojiContainer = this.shadowRoot.querySelector('.emoji-container')
+    const emojiPicker = this.shadowRoot.querySelector('emoji-picker')
+    const textarea = this.shadowRoot.querySelector('textarea')
+
+    // Insert emoji into textarea
+    emojiPicker.addEventListener('emoji-click', event => {
+      textarea.value += event.detail.unicode
+    })
+
+    /**
+     * Handles clicks outside the emoji container to close it.
+     *
+     * @param {MouseEvent} event - The click event.
+     */
+    function onClickOutside (event) {
+      const path = event.composedPath()
+      if (!path.includes(emojiContainer) && !path.includes(emojiButton)) {
+        emojiContainer.hidden = true
+        document.removeEventListener('click', onClickOutside)
+      }
+    }
+
+    emojiButton.addEventListener('click', (e) => {
+      e.stopPropagation() // Prevent the click from propagating to the document
+      emojiContainer.hidden = !emojiContainer.hidden
+
+      if (!emojiContainer.hidden) {
+        document.addEventListener('click', onClickOutside)
+      } else {
+        document.removeEventListener('click', onClickOutside)
+      }
+    })
 
     this.socket = new WebSocket('wss://courselab.lnu.se/message-app/socket')
 
@@ -217,7 +316,8 @@ class MessageApp extends HTMLElement {
       }
     })
 
-    this.shadowRoot.querySelector('button').addEventListener('click', () => {
+    const sendButton = this.shadowRoot.querySelector('.send-button')
+    sendButton.addEventListener('click', () => {
       const textarea = this.shadowRoot.querySelector('textarea')
       const messageText = textarea.value.trim()
       if (messageText) {
