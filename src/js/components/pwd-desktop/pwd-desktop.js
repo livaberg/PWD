@@ -38,8 +38,8 @@ class PwdDesktop extends HTMLElement {
         <button class="app-icon" data-label="Messages">
           <img src="icons/messaging.png" alt="Messaging Icon" />
         </button>
-        <button class="app-icon" data-label="Custom App">
-          <img src="icons/custom.png" alt="Custom Icon" />
+        <button class="app-icon" data-label="History">
+          <img src="icons/custom.png" alt="History Icon" />
         </button>
       </div>
 
@@ -112,8 +112,8 @@ class PwdDesktop extends HTMLElement {
           case 'Messages':
             appContent = document.createElement('message-app')
             break
-          case 'Custom App':
-            appContent = document.createElement('custom-app')
+          case 'History':
+            appContent = document.createElement('history-app')
             break
           default:
             appContent = document.createElement('div')
