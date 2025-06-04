@@ -38,8 +38,8 @@ class PwdDesktop extends HTMLElement {
         <button class="app-icon" data-label="Messages">
           <img src="icons/messaging.png" alt="Messaging Icon" />
         </button>
-        <button class="app-icon" data-label="History">
-          <img src="icons/custom.png" alt="History Icon" />
+        <button class="app-icon" data-label="Today in History">
+          <img src="icons/hieroglyph.png" alt="History Icon" />
         </button>
       </div>
 
@@ -65,12 +65,10 @@ class PwdDesktop extends HTMLElement {
             rel="noopener"
             >Messages icon created by Freepik - Flaticon
           </a>
-          <a
-            href="https://www.flaticon.com/free-icons/app"
-            title="app icons"
+            <a href="https://www.flaticon.com/free-icons/history" title="history icons"
             target="_blank"
             rel="noopener"
-            >App icon created by Freepik - Flaticon
+            >History icons created by Eucalyp - Flaticon
           </a>
           <a
             href="https://www.flaticon.com/free-icons/recycle-bin"
@@ -112,7 +110,7 @@ class PwdDesktop extends HTMLElement {
           case 'Messages':
             appContent = document.createElement('message-app')
             break
-          case 'History':
+          case 'Today in History':
             appContent = document.createElement('history-app')
             break
           default:
