@@ -287,6 +287,20 @@ customElements.define('memory-app',
 
           if (tiles.all.every(tile => tile.hidden)) {
             tiles.all.forEach(tile => (tile.disabled = true))
+
+            // Trigger confetti animation if available.
+            if (typeof window.confetti === 'function') {
+              window.confetti({
+                particleCount: 300,
+                spread: 360,
+                startVelocity: 60,
+                decay: 0.9,
+                scalar: 1.2,
+                origin: { y: 0.6 },
+                ticks: 300
+              })
+            }
+
             this.dispatchEvent(new CustomEvent('memory-app:game-over', {
               bubbles: true
             }))
