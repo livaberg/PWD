@@ -153,6 +153,12 @@ customElements.define('memory-app',
 
       this.#upgradeProperty('boardsize')
 
+      this.#sizeSelector = this.shadowRoot.querySelector('#size-selector')
+
+      this.#gameBoard.style.display = 'none'
+
+      this.shadowRoot.querySelector('#size-selector-wrapper').style.display = 'flex'
+
       this.#gameBoard.addEventListener('flipping-tile:flip',
         () => this.#onTileFlip(),
         { signal: this.#abortController.signal }
@@ -167,16 +173,16 @@ customElements.define('memory-app',
         { signal: this.#abortController.signal }
       )
 
-      this.#sizeSelector = this.shadowRoot.querySelector('#size-selector')
-
       this.#sizeSelector.addEventListener('click', (event) => {
         if (event.target.tagName === 'BUTTON') {
           const size = event.target.getAttribute('data-size')
           this.boardSize = size
 
-          this.#sizeSelector.hidden = true
+          this.shadowRoot.querySelector('#size-selector-wrapper').style.display = 'none'
 
-          this.#gameBoard.hidden = false
+          this.#gameBoard.style.display = 'grid'
+
+          this.#init()
         }
       }, { signal: this.#abortController.signal })
     }
@@ -243,6 +249,12 @@ customElements.define('memory-app',
         tile.querySelector('img').setAttribute('src', IMG_URLS[indexes[i] % (tilesCount / 2) + 1])
         tile.faceUp = tile.disabled = tile.hidden = false
       })
+
+      this.#tiles.all.forEach(tile => {
+        tile.removeAttribute('face-up')
+        tile.removeAttribute('disabled')
+        tile.removeAttribute('hidden')
+      })
     }
 
     /**
@@ -285,7 +297,7 @@ customElements.define('memory-app',
             detail: { first, second }
           }))
 
-          if (tiles.all.every(tile => tile.hidden)) {
+          if (tiles.all.every(tile => tile.hasAttribute('hidden'))) {
             tiles.all.forEach(tile => (tile.disabled = true))
 
             // Trigger confetti animation if available.
@@ -305,12 +317,20 @@ customElements.define('memory-app',
               bubbles: true
             }))
 
-            this.#init()
+            this.#resetGame()
           } else {
             tilesToEnable?.forEach(tile => (tile.removeAttribute('disabled')))
           }
         }, delay)
       }
+    }
+
+    /**
+     * Resets the game board to show the size selector again.
+     */
+    #resetGame () {
+      this.shadowRoot.querySelector('#size-selector-wrapper').style.display = 'flex'
+      this.#gameBoard.style.display = 'none'
     }
   }
 )

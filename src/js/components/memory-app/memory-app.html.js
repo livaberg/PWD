@@ -18,11 +18,13 @@ htmlTemplate.innerHTML = `
   </flipping-tile>
   </template>
 
+  <div id="size-selector-wrapper">
   <div id="size-selector">
-    <p>Välj antal brickor:</p>
+    <p>Choose number of tiles:</p>
     <button data-size="large">4 x 4</button>
     <button data-size="medium">4 x 2</button>
     <button data-size="small">2 x 2</button>
+  </div>
   </div>
 
   <div id="game-board" hidden></div>

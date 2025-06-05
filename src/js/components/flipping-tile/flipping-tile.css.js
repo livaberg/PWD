@@ -64,6 +64,16 @@ cssTemplate.innerHTML = `
       border-color: #858585;
     }
 
+    button:focus-visible {
+      outline: 4px solid #0055ff;
+      outline-offset: 3px;
+      box-shadow: 0 0 0 4px rgba(0, 85, 255, 0.5);
+      border-radius: 10px;
+      z-index: 2;
+      transform: scale(1.1);
+      transition: transform 0.2s ease;
+    }
+
     #front,
     #back {
       width: calc(100% - 4px);

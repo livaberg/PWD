@@ -44,36 +44,44 @@ cssTemplate.innerHTML = `
       border-width: 5px;
       background: url("${IMG_URLS[0]}") no-repeat center/80%, radial-gradient(#fff,rgb(238, 153, 228));
     }
+  
+    #size-selector-wrapper {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+
     #size-selector {
-  border: 1px solid #ccc;
-  padding: 10px;
-  width: 150px;
-  margin-bottom: 1em;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
+      background: white;
+      border: 1px solid #ccc;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
 
-#size-selector button {
-  cursor: pointer;
-  padding: 6px 8px;
-  font-size: 1em;
-  border: 1px solid #999;
-  background-color: white;
-  border-radius: 4px;
-  transition: background-color 0.3s ease;
-}
+    #size-selector button {
+      cursor: pointer;
+      padding: 6px 8px;
+      font-size: 1em;
+      border: 1px solid #999;
+      background-color: white;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
 
-#size-selector button:hover {
-  background-color: #eee;
-}
+    #size-selector button:hover {
+      background-color: #eee;
+    }
 
-#size-selector button:focus {
-  outline: 2px solid #0078d7;
-  outline-offset: 2px;
-}
-[hidden] {
-  display: none !important;
-}
+    #size-selector button:focus {
+      outline: 2px solid #0078d7;
+      outline-offset: 2px;
+    }
   </style>
 `
