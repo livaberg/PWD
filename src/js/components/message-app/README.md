@@ -39,6 +39,3 @@ The component relies on:
 
    - **Emoji-picker-element** for emoji selection whitin the chat interface.
     https://www.npmjs.com/package/emoji-picker-element
-
-
-
