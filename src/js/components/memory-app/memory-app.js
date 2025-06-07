@@ -38,7 +38,26 @@ customElements.define('memory-app',
      */
     #tileTemplate
 
+    /**
+     * The size selector element.
+     *
+     * @type {HTMLDivElement}
+     */
     #sizeSelector
+
+    /**
+     * The number of attempts made.
+     *
+     * @type {number}
+     */
+    #attempts = 0
+
+    /**
+     * The attempt counter element.
+     *
+     * @type {HTMLDivElement}
+     */
+    #attemptCounterElement
 
     /**
      * Creates an instance of the current type.
@@ -154,6 +173,9 @@ customElements.define('memory-app',
       this.#upgradeProperty('boardsize')
 
       this.#sizeSelector = this.shadowRoot.querySelector('#size-selector')
+      this.#attemptCounterElement = this.shadowRoot.querySelector('#attempt-counter')
+
+      this.#attemptCounterElement.style.display = 'none'
 
       this.#gameBoard.style.display = 'none'
 
@@ -212,6 +234,10 @@ customElements.define('memory-app',
      * Initializes the game board size and tiles.
      */
     #init () {
+      this.#attempts = 0
+      this.#attemptCounterElement.style.display = 'block'
+      this.#updateAttemptCounter()
+
       const { width, height } = this.#gameBoardSize
 
       const tilesCount = width * height
@@ -265,6 +291,9 @@ customElements.define('memory-app',
       const tilesToDisable = Array.from(tiles.faceUp)
 
       if (tiles.faceUp.length > 1) {
+        this.#attempts++
+        this.#updateAttemptCounter()
+
         tilesToDisable.push(...tiles.faceDown)
       }
 
@@ -317,7 +346,7 @@ customElements.define('memory-app',
               bubbles: true
             }))
 
-            this.#resetGame()
+            this.#showFinalResult()
           } else {
             tilesToEnable?.forEach(tile => (tile.removeAttribute('disabled')))
           }
@@ -326,11 +355,38 @@ customElements.define('memory-app',
     }
 
     /**
+     * Updates the attempt counter element.
+     */
+    #updateAttemptCounter () {
+      this.#attemptCounterElement.textContent = `Number of attempts: ${this.#attempts}`
+    }
+
+    /**
+     * Shows the final result in an alert box.
+     */
+    #showFinalResult () {
+      const resultBox = this.shadowRoot.querySelector('#result-alert')
+      const resultMessage = this.shadowRoot.querySelector('#result-message')
+
+      resultMessage.textContent = `Congratulations! You finished the game in ${this.#attempts} attempts.`
+
+      resultBox.classList.add('visible')
+
+      // Hide the result box after 4 seconds.
+      setTimeout(() => {
+        resultBox.classList.remove('visible')
+      }, 4000)
+
+      this.#resetGame()
+    }
+
+    /**
      * Resets the game board to show the size selector again.
      */
     #resetGame () {
       this.shadowRoot.querySelector('#size-selector-wrapper').style.display = 'flex'
       this.#gameBoard.style.display = 'none'
+      this.#attemptCounterElement.style.display = 'none'
     }
   }
 )

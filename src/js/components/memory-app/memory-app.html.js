@@ -20,7 +20,7 @@ htmlTemplate.innerHTML = `
 
   <div id="size-selector-wrapper">
   <div id="size-selector">
-    <p>Choose number of tiles:</p>
+    <p>Choose the number of tiles:</p>
     <button data-size="large">4 x 4</button>
     <button data-size="medium">4 x 2</button>
     <button data-size="small">2 x 2</button>
@@ -28,4 +28,10 @@ htmlTemplate.innerHTML = `
   </div>
 
   <div id="game-board" hidden></div>
+<div id="attempt-counter"></div>
+</div>
+
+<div id="result-alert">
+  <span id="result-message"></span>
+</div>
 `
