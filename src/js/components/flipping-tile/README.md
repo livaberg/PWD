@@ -43,5 +43,3 @@ The back element (div) is styleable using the part `tile-back`.
     <img src="./images/2.png" alt="phonograph" />
 </flipping-tile>
 ```
-
-![Example](./.readme/example.gif)
