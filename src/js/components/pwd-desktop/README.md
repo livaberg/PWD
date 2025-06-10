@@ -1,34 +1,40 @@
-<my-component>
-A web component that represents...
+# &lt;pwd-desktop&gt;
 
-Attributes
-
-anattribute
-
-Description of the attribute.
-Default value: the default value
-
-Events
+A custom web component that represents a full web desktop UI. It includes a taskbar with a start button and a real-time clock, a dock with app icons, and a desktop area where app windows can be opened and managed.
 
 
+## Attributes
 
-Event Name
-Fired When
-
-
+None
 
 
-theevent
-Something happens
+## Features
+
+- Taskbar with a start button and live updating clock showing date and time in Swedish locale.  
+- Dock with clickable app icons that open draggable app windows (`<app-window>`) for Memory, Messages, and Today in History apps.  
+- Desktop area supporting multiple open app windows with cascading positioning to avoid exact overlap.  
+- Windows dynamically receive increasing z-index to stay on top when clicked.  
+- Encapsulated UI and styling using Shadow DOM.  
 
 
-thesecondevent
-Something else happens
+## Events
+
+None
 
 
+## Example
+
+```html
+<pwd-desktop></pwd-desktop>
+```
 
 
-Example
+## Dependencies
 
-<my-component></my-component>
- 
+The component relies on:  
+
+  - The **`<app-window>`** component for window frames.  
+
+  - The app components **`<memory-app>`**, **`<message-app>`**, and **`<history-app>`** launched inside windows.  
+
+  - External CSS styles imported from `/css/styles.css`.  
