@@ -1,13 +1,17 @@
 import { API_KEY, CHANNEL } from '../../../../secrets.js'
 
 /**
+ * Chat message application. Manages user interaction, message sending and receiving via WebSocket, and emoji input.
+ *
  * @file The message-app web component module.
  * @module message-app
+ * @class MessageApp
+ * @augments HTMLElement
  * @author Liv Åberg <lh224hh@student.lnu.se>
  */
 class MessageApp extends HTMLElement {
   /**
-   * Constructor sets up the Shadow DOM in open mode.
+   * Creates an instance of MessageApp and attaches a Shadow DOM.
    */
   constructor () {
     super()
@@ -16,9 +20,10 @@ class MessageApp extends HTMLElement {
 
   /**
    * Lifecycle method called when the element is added to the DOM.
-   * Renders the UI and starts the clock update interval.
+   * Renders the UI, username prompt, event listeners, and WebSocket connection.
    */
   connectedCallback () {
+    // Retrieve username from localStorage or prompt for it
     let username = localStorage.getItem('messageAppUsername')
 
     if (!username) {
@@ -32,6 +37,7 @@ class MessageApp extends HTMLElement {
 
     this.username = username
 
+    // Render initial HTML structure and styles
     this.shadowRoot.innerHTML = `
       <style>
         :host {
@@ -205,9 +211,7 @@ class MessageApp extends HTMLElement {
       </style>
 
       <div class="chat-wrapper">
-      <div class="messages">
-        <div class="message other">Hej!</div>
-          <div class="message self">Testar det här är ett jättejätte jättelångt meddelande</div>
+        <div class="messages">
         </div>
      
       <div class="footer">
@@ -228,12 +232,13 @@ class MessageApp extends HTMLElement {
     </div>
     `
 
+    // Element references
     const emojiButton = this.shadowRoot.querySelector('.emoji-button')
     const emojiContainer = this.shadowRoot.querySelector('.emoji-container')
     const emojiPicker = this.shadowRoot.querySelector('emoji-picker')
     const textarea = this.shadowRoot.querySelector('textarea')
 
-    // Insert emoji into textarea
+    // Insert emoji into textarea when clicked
     emojiPicker.addEventListener('emoji-click', event => {
       textarea.value += event.detail.unicode
     })
@@ -245,12 +250,15 @@ class MessageApp extends HTMLElement {
      */
     function onClickOutside (event) {
       const path = event.composedPath()
+
+      // Hide the emoji container if the click is outside of it
       if (!path.includes(emojiContainer) && !path.includes(emojiButton)) {
         emojiContainer.hidden = true
         document.removeEventListener('click', onClickOutside)
       }
     }
 
+    // Toggle emoji container visibility on button click
     emojiButton.addEventListener('click', (e) => {
       e.stopPropagation() // Prevent the click from propagating to the document
       emojiContainer.hidden = !emojiContainer.hidden
@@ -315,6 +323,7 @@ class MessageApp extends HTMLElement {
       }
     })
 
+    // Send message when send button is clicked or Enter is pressed
     const sendButton = this.shadowRoot.querySelector('.send-button')
     sendButton.addEventListener('click', () => {
       const textarea = this.shadowRoot.querySelector('textarea')
@@ -322,7 +331,6 @@ class MessageApp extends HTMLElement {
       if (messageText) {
         this.sendMessage(messageText)
         textarea.value = ''
-        // console.log(`Sent message: ${messageText}`)
       }
     })
     this.shadowRoot.querySelector('textarea').addEventListener('keydown', (event) => {
@@ -333,7 +341,6 @@ class MessageApp extends HTMLElement {
         if (messageText) {
           this.sendMessage(messageText)
           textarea.value = ''
-          // console.log(`Sent message: ${messageText}`)
         }
       }
     })

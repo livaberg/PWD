@@ -14,9 +14,10 @@ class HistoryApp extends HTMLElement {
 
   /**
    * Lifecycle method called when the element is added to the DOM.
-   * Renders the UI and sets up event listeners.
+   * Sets up inner HTML, fetches today's historical fact, and attaches event listeners for the date selection and random button.
    */
   connectedCallback () {
+    // Render main UI: title, date display, fact output, date picker, and random button
     this.shadowRoot.innerHTML = `
       <style>
         :host {

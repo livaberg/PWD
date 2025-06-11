@@ -13,6 +13,7 @@ class AppWindow extends HTMLElement {
     this.attachShadow({ mode: 'open' })
 
     this._dragging = false
+    // Bind drag event handlers to maintain correct `this` context
     this._onDrag = this._onDrag.bind(this)
     this._onDragEnd = this._onDragEnd.bind(this)
   }
@@ -95,7 +96,9 @@ class AppWindow extends HTMLElement {
     const title = this.getAttribute('title')
     this.shadowRoot.querySelector('.title').textContent = title
 
-    this.shadowRoot.querySelector('.close-btn').addEventListener('click', () => this.remove())
+    const closeBtn = this.shadowRoot.querySelector('.close-btn')
+    closeBtn.addEventListener('click', () => this.remove())
+    closeBtn.addEventListener('mousedown', e => e.stopPropagation())
 
     const header = this.shadowRoot.querySelector('.header')
     header.addEventListener('mousedown', this._onDragStart.bind(this))
@@ -112,8 +115,12 @@ class AppWindow extends HTMLElement {
   _onDragStart (event) {
     event.preventDefault()
     this._dragging = true
+
+    // Store initial mouse position
     this._startX = event.clientX
     this._startY = event.clientY
+
+    // Calculate the offset from the top-left corner of the window
     const rect = this.getBoundingClientRect()
     this._offsetX = this._startX - rect.left
     this._offsetY = this._startY - rect.top
@@ -148,7 +155,10 @@ class AppWindow extends HTMLElement {
    * Bring the window to the front by setting a higher z-index.
    */
   _bringToFront () {
+    // Get all sibling elements
     const siblings = Array.from(this.parentElement.children)
+
+    // Find the maximum z-index among siblings
     const maxZ = siblings.reduce((max, el) => {
       const z = parseInt(window.getComputedStyle(el).zIndex) || 0
       return z > max ? z : max
