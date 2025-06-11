@@ -146,9 +146,9 @@ body::before {
 }
 
 .trash-bin {
-  position: absolute;
-  bottom: 0px;
-  right: 140px;
+  position: fixed;
+  bottom: 30px;
+  right: 40px;
   background: none;
   border: none;
   cursor: pointer;
@@ -187,5 +187,66 @@ body::before {
 
 #icon-attribution a:hover {
   text-decoration: underline;
+}
+
+@media (max-width: 900px) {
+  #dock {
+    height: 140px;          
+    padding: 1rem 1.5rem;    
+    max-width: 90%;          
+  }
+
+  .app-icon {
+    font-size: 3rem;        
+  }
+
+  .app-icon img {
+    width: 6rem;
+    height: 6rem;
+  }
+
+  .trash-bin {
+    right: 100px;            
+  }
+
+  .trash-bin img {
+    width: 6rem;
+    height: 6rem;
+  }
+
+  #desktop {
+    bottom: 160px;      
+  }
+}
+
+@media (max-width: 600px) {
+  #dock {
+    height: 110px;
+    padding: 0.5rem 1rem;
+    max-width: 95%;
+  }
+
+  .app-icon {
+    font-size: 2.5rem;
+  }
+
+  .app-icon img {
+    width: 4.5rem;
+    height: 4.5rem;
+  }
+
+  .trash-bin {
+    right: 60px;
+  }
+
+  .trash-bin img {
+    width: 4.5rem;
+    height: 4.5rem;
+  }
+
+  #desktop {
+    bottom: 130px;
+    padding: 0.5rem;
+  }
 }
 
