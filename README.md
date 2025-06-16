@@ -5,7 +5,7 @@ designed as a browser-based desktop environment. It allows users to launch and m
 
 Example: [Demo - Personal Web Desktop](https://youtu.be/gNcMvPCyHC0)
 
-The PWD includes three sub-applications: 
+The PWD includes three sub-applications:  
 A memory game  
 A real-time messaging app  
 A custom sub-application: "Today in History"  

@@ -216,7 +216,7 @@ class MessageApp extends HTMLElement {
      
       <div class="footer">
       <div class="current-user">Chatting as: ${this.username}</div>
-      <div class="input-area">
+      <form class="input-area">
         <textarea rows="2" placeholder="Type your message..."></textarea>
         <button class="emoji-button" aria-label="Open emoji picker">
             <span class="emoji">❤️</span>
@@ -227,7 +227,7 @@ class MessageApp extends HTMLElement {
             <emoji-picker></emoji-picker>
           </div>
         <button class="send-button">Send</button>
-      </div>
+      </form>
       </div>
     </div>
     `
@@ -237,10 +237,31 @@ class MessageApp extends HTMLElement {
     const emojiContainer = this.shadowRoot.querySelector('.emoji-container')
     const emojiPicker = this.shadowRoot.querySelector('emoji-picker')
     const textarea = this.shadowRoot.querySelector('textarea')
+    const sendButton = this.shadowRoot.querySelector('.send-button')
 
     // Insert emoji into textarea when clicked
     emojiPicker.addEventListener('emoji-click', event => {
       textarea.value += event.detail.unicode
+    })
+
+    const form = this.shadowRoot.querySelector('form')
+
+    // Handle form submission
+    form.addEventListener('submit', (event) => {
+      event.preventDefault()
+      const messageText = textarea.value.trim()
+
+      if (messageText) {
+        sendButton.disabled = true // Disable the send button to prevent multiple submissions
+
+        this.sendMessage(messageText)
+        textarea.value = ''
+
+        setTimeout(() => {
+          sendButton.disabled = false // Re-enable the send button after a short delay
+        }
+        , 500)
+      }
     })
 
     /**
@@ -248,15 +269,17 @@ class MessageApp extends HTMLElement {
      *
      * @param {MouseEvent} event - The click event.
      */
-    function onClickOutside (event) {
+    this._onClickOutside = (event) => {
       const path = event.composedPath()
 
       // Hide the emoji container if the click is outside of it
       if (!path.includes(emojiContainer) && !path.includes(emojiButton)) {
         emojiContainer.hidden = true
-        document.removeEventListener('click', onClickOutside)
+        document.removeEventListener('click', this._onClickOutside)
       }
     }
+
+    document.addEventListener('click', this._onClickOutside)
 
     // Toggle emoji container visibility on button click
     emojiButton.addEventListener('click', (e) => {
@@ -264,9 +287,9 @@ class MessageApp extends HTMLElement {
       emojiContainer.hidden = !emojiContainer.hidden
 
       if (!emojiContainer.hidden) {
-        document.addEventListener('click', onClickOutside)
+        document.addEventListener('click', this._onClickOutside)
       } else {
-        document.removeEventListener('click', onClickOutside)
+        document.removeEventListener('click', this._onClickOutside)
       }
     })
 
@@ -323,16 +346,6 @@ class MessageApp extends HTMLElement {
       }
     })
 
-    // Send message when send button is clicked or Enter is pressed
-    const sendButton = this.shadowRoot.querySelector('.send-button')
-    sendButton.addEventListener('click', () => {
-      const textarea = this.shadowRoot.querySelector('textarea')
-      const messageText = textarea.value.trim()
-      if (messageText) {
-        this.sendMessage(messageText)
-        textarea.value = ''
-      }
-    })
     this.shadowRoot.querySelector('textarea').addEventListener('keydown', (event) => {
       if (event.key === 'Enter' && !event.shiftKey) {
         event.preventDefault()
@@ -364,6 +377,21 @@ class MessageApp extends HTMLElement {
       this.socket.send(JSON.stringify(messageObject))
     } else {
       console.warn('WebSocket is not open. Unable to send message.')
+    }
+  }
+
+  /**
+   * Called after the element has been removed from the DOM.
+   * Cleans up event listeners and closes the WebSocket connection.
+   */
+  disconnectedCallback () {
+    // Remove the click listener you added to the document
+    document.removeEventListener('click', this._onClickOutside)
+
+    // Close the WebSocket connection
+    if (this.socket) {
+      this.socket.close()
+      this.socket = null
     }
   }
 }
